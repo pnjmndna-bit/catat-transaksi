@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Keuangan Saya</title>
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="style.css">
+
+</head>
+<body>
+
+<!-- =========================
+     DRAWER
+========================= -->
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<aside class="drawer" id="drawer">
+
+    <div class="drawer-header">
+
+        <div class="drawer-logo">
+
+            <img src="img/logo.png">
+
+        </div>
+
+        <h2>Catat Keuangan</h2>
+
+        <p>Transaksi mu</p>
+
+        <div class="drawer-auth">
+
+            <button class="login-btn">
+                Login
+            </button>
+
+            <button class="register-btn">
+                Daftar
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="drawer-title">
+
+        AKUN
+
+    </div>
+
+    <div class="drawer-menu">
+
+        <a href="#">
+            <i data-lucide="house"></i>
+            <span>Beranda</span>
+        </a>
+
+        <a href="#">
+            <i data-lucide="receipt-text"></i>
+            <span>Riwayat Transaksi</span>
+        </a>
+
+        <a href="#">
+            <i data-lucide="landmark"></i>
+            <span>Bank Saya</span>
+        </a>
+
+        <a href="#">
+            <i data-lucide="chart-column"></i>
+            <span>Statistik</span>
+        </a>
+
+        <a href="#">
+            <i data-lucide="hand-coins"></i>
+            <span>Hutang / Piutang</span>
+        </a>
+
+    </div>
+
+    <div class="drawer-bottom">
+
+        <a href="#">
+            <i data-lucide="settings"></i>
+            <span>Pengaturan</span>
+        </a>
+
+        <a href="#">
+            <i data-lucide="log-out"></i>
+            <span>Keluar</span>
+        </a>
+
+    </div>
+
+</aside>
+
+<div class="bg-circle circle1"></div>
+<div class="bg-circle circle2"></div>
+
+<div class="container">
+
+<!-- HEADER -->
+
+<section class="hero">
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="logo-box">
+
+                <img src="img/logo.png" class="logo">
+
+            </div>
+
+            <div class="header-text">
+
+                <h2>Catat Keuangan</h2>
+
+                <p>Transaksi mu</p>
+
+            </div>
+
+        </div>
+
+        <button class="menu-btn" id="menuBtn">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+    </div>
+
+    <div class="welcome">
+
+        <p>Selamat datang kembali,</p>
+
+        <h1>Pengguna</h1>
+
+    </div>
+
+</section>
+
+<!-- SALDO -->
+
+<section class="glass saldo-card">
+
+    <div class="saldo-head">
+
+        <p class="saldo-title">
+            Total Saldo
+        </p>
+
+        <span class="saldo-dot"></span>
+
+    </div>
+
+    <h2 id="saldo">
+        Rp0
+    </h2>
+
+    <div class="bank-list">
+
+        <div class="bank-card">
+
+            <div class="bank-name">
+                SeaBank
+            </div>
+
+            <div class="bank-value">
+                Rp0
+            </div>
+
+        </div>
+
+        <div class="bank-card">
+
+            <div class="bank-name">
+                Jago
+            </div>
+
+            <div class="bank-value">
+                Rp0
+            </div>
+
+        </div>
+
+        <div class="bank-card">
+
+            <div class="bank-name">
+                Mandiri
+            </div>
+
+            <div class="bank-value">
+                Rp0
+            </div>
+
+        </div>
+
+        <button class="add-bank">
+
+            + Tambah
+
+        </button>
+
+    </div>
+
+</section>
+  
+<!-- =========================
+     TRANSAKSI BULAN INI
+========================= -->
+
+<section class="glass transaction-card">
+
+    <div class="transaction-header">
+
+        <p class="transaction-label">
+            Ringkasan
+        </p>
+
+        <h3>
+            Transaksi Bulan Ini
+        </h3>
+
+    </div>
+
+    <div class="summary-grid">
+
+        <!-- PEMASUKAN -->
+
+        <div class="summary-box income-box">
+
+            <div class="summary-icon income-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path d="M12 18V6M12 6L7 11M12 6L17 11"
+
+                    stroke="currentColor"
+
+                    stroke-width="2.2"
+
+                    stroke-linecap="round"
+
+                    stroke-linejoin="round"/>
+
+                </svg>
+
+            </div>
+
+            <div class="summary-info">
+
+                <span>Pemasukan</span>
+
+                <h4 id="incomeTotal">
+
+                    Rp0
+
+                </h4>
+
+            </div>
+
+            <button class="category-btn">
+
+                Kategori
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path d="M7 10L12 15L17 10"
+
+                    stroke="currentColor"
+
+                    stroke-width="2"
+
+                    stroke-linecap="round"
+
+                    stroke-linejoin="round"/>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <!-- PENGELUARAN -->
+
+        <div class="summary-box expense-box">
+
+            <div class="summary-icon expense-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path d="M12 6V18M12 18L7 13M12 18L17 13"
+
+                    stroke="currentColor"
+
+                    stroke-width="2.2"
+
+                    stroke-linecap="round"
+
+                    stroke-linejoin="round"/>
+
+                </svg>
+
+            </div>
+
+            <div class="summary-info">
+
+                <span>Pengeluaran</span>
+
+                <h4 id="expenseTotal">
+
+                    Rp0
+
+                </h4>
+
+            </div>
+
+            <button class="category-btn">
+
+                Kategori
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path d="M7 10L12 15L17 10"
+
+                    stroke="currentColor"
+
+                    stroke-width="2"
+
+                    stroke-linecap="round"
+
+                    stroke-linejoin="round"/>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+ <!-- =========================
+     FORM TRANSAKSI
+========================= -->
+
+<section class="glass form-card">
+
+    <div class="form-header">
+
+        <p>Tambah Baru</p>
+
+        <h3>Transaksi</h3>
+
+    </div>
+
+    <!-- Jenis Transaksi -->
+    <div class="form-grid">
+
+        <button
+            type="button"
+            id="incomeBtn"
+            class="type-btn active">
+
+            Pemasukan
+
+        </button>
+
+        <button
+            type="button"
+            id="expenseBtn"
+            class="type-btn">
+
+            Pengeluaran
+
+        </button>
+
+    </div>
+
+    <!-- Kategori -->
+    <div class="input-box">
+
+        <label for="category">Kategori</label>
+
+        <select id="category">
+
+            <option value="">Pilih kategori</option>
+
+        </select>
+
+    </div>
+
+    <!-- Nominal -->
+    <div class="input-box">
+
+        <label for="amount">Nominal</label>
+
+        <div class="input-wrapper">
+
+            <svg class="input-icon" viewBox="0 0 24 24">
+                <path
+                    d="M12 3v18M8 7c0-2 2-3 4-3s4 1 4 3-2 3-4 3-4 1-4 3 2 3 4 3 4-1 4-3"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"/>
+            </svg>
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Masukkan nominal"
+                required>
+
+        </div>
+
+    </div>
+
+    <!-- Catatan -->
+    <div class="input-box">
+
+        <label for="title">Catatan</label>
+
+        <div class="input-wrapper">
+
+            <svg class="input-icon" viewBox="0 0 24 24">
+                <path
+                    d="M7 4h10M7 8h10M7 12h7M5 20h14a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Tambahkan catatan">
+
+        </div>
+
+    </div>
+
+    <!-- Simpan -->
+    <button
+        type="button"
+        id="saveBtn"
+        class="save-btn">
+
+        <svg viewBox="0 0 24 24">
+            <path
+                d="M5 12l5 5L20 7"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+
+        Simpan Transaksi
+
+    </button>
+
+</section>
+
+<!-- =========================
+     RIWAYAT TRANSAKSI
+========================= -->
+
+<section class="glass history-card">
+
+    <div class="history-header">
+
+        <div>
+
+            <p class="history-subtitle">
+
+                Aktivitas
+
+            </p>
+
+            <h3>
+
+                10 Transaksi Terakhir
+
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div id="transactionList">
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <svg viewBox="0 0 24 24" fill="none">
+
+                    <path d="M12 8V12L15 15"
+
+                    stroke="currentColor"
+
+                    stroke-width="2"
+
+                    stroke-linecap="round"
+
+                    stroke-linejoin="round"/>
+
+                    <circle cx="12" cy="12" r="9"
+
+                    stroke="currentColor"
+
+                    stroke-width="2"/>
+
+                </svg>
+
+            </div>
+
+            <h4>
+
+                Belum ada transaksi
+
+            </h4>
+
+            <p>
+
+                Semua transaksi yang Anda simpan akan muncul di sini.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+lucide.createIcons();
+</script>
+  
+<script src="script.js"></script>
+
+</body>
+</html>
