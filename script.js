@@ -20,6 +20,42 @@ document.getElementById("incomeTotal");
 const expenseTotal =
 document.getElementById("expenseTotal");
 
+const homePage =
+document.getElementById("homePage");
+
+const bankPage =
+document.getElementById("bankPage");
+
+const historyPage =
+document.getElementById("historyPage");
+
+const statisticPage =
+document.getElementById("statisticPage");
+
+const debtPage =
+document.getElementById("debtPage");
+
+const settingPage =
+document.getElementById("settingPage");
+
+const homeMenu =
+document.getElementById("homeMenu");
+
+const bankMenu =
+document.getElementById("bankMenu");
+
+const historyMenu =
+document.getElementById("historyMenu");
+
+const statisticMenu =
+document.getElementById("statisticMenu");
+
+const debtMenu =
+document.getElementById("debtMenu");
+
+const settingMenu =
+document.getElementById("settingMenu");
+
 
 /* =========================
    TYPE BUTTON
@@ -51,12 +87,43 @@ document.getElementById("drawerOverlay");
 /* =========================
    LOCAL STORAGE
 ========================= */
-
 let transactions =
 JSON.parse(
-localStorage.getItem("transactions")
+    localStorage.getItem("transactions")
 ) || [];
 
+let banks =
+JSON.parse(
+localStorage.getItem("banks")
+) || [
+
+    {
+
+        id:Date.now(),
+
+        name:"Cash",
+
+        saldo:0
+
+    }
+
+];
+
+function showPage(page){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(item=>{
+
+        item.classList.remove("active");
+
+    });
+
+    page.classList.add("active");
+
+    closeDrawer();
+
+}
 
 /* =========================
    FORMAT RUPIAH
@@ -80,6 +147,11 @@ function saveData(){
     localStorage.setItem(
         "transactions",
         JSON.stringify(transactions)
+    );
+
+    localStorage.setItem(
+        "banks",
+        JSON.stringify(banks)
     );
 
 }
@@ -272,76 +344,81 @@ function render(){
     }
 
     transactions
-    .slice(0,10)
-    .forEach(item=>{
+.slice(0,10)
+.forEach(item=>{
 
-        transactionList.innerHTML += `
+    transactionList.innerHTML += `
 
-        <div class="item">
+    <div class="transaction-item">
 
-            <div class="item-left">
+        <div class="transaction-left">
 
-                <div class="item-icon ${item.type}">
+            <div class="transaction-icon ${item.type}">
 
-                    ${
-                        item.type=="income"
-                        ? "⬇"
-                        : "⬆"
-                    }
-
-                </div>
-
-                <div>
-
-                    <div class="item-title">
-
-                        ${item.title}
-
-                    </div>
-
-                    <div class="item-date">
-
-                        ${item.category}
-
-                        •
-
-                        ${item.date}
-
-                    </div>
-
-                </div>
+                ${
+                    item.type=="income"
+                    ? `
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 18V6M12 6L7 11M12 6L17 11"
+                        stroke="currentColor"
+                        stroke-width="2.3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                    </svg>
+                    `
+                    :
+                    `
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 6V18M12 18L7 13M12 18L17 13"
+                        stroke="currentColor"
+                        stroke-width="2.3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                    </svg>
+                    `
+                }
 
             </div>
 
-            <div class="item-right">
+            <div class="transaction-info">
 
-                <div class="amount ${item.type=="income"?"plus":"minus"}">
+    <h4>${item.title}</h4>
 
-                    ${
-                        item.type=="income"
-                        ? "+"
-                        : "-"
-                    }
+    <p>${item.date}</p>
 
-                    ${rupiah(item.amount)}
+    <div class="transaction-category">
+        ${item.category}
+    </div>
 
-                </div>
-
-                <button
-                class="delete"
-                onclick="removeTransaction('${item.id}')">
-
-                    ✕
-
-                </button>
-
-            </div>
+</div>
 
         </div>
 
-        `;
+        <div class="transaction-right">
 
-    });
+            <div class="transaction-amount ${item.type}">
+
+                ${item.type=="income" ? "+" : "-"}
+
+                ${rupiah(item.amount)}
+
+            </div>
+
+            <button
+            class="delete-btn"
+            onclick="removeTransaction('${item.id}')">
+
+                ✕
+
+            </button>
+
+        </div>
+
+    </div>
+
+    `;
+
+});
 
     updateSummary();
 
@@ -519,7 +596,7 @@ amount.addEventListener("keypress",e=>{
 function animateItems(){
 
     const items =
-    document.querySelectorAll(".item");
+document.querySelectorAll(".transaction-item");
 
     items.forEach((item,index)=>{
 
@@ -594,14 +671,50 @@ document.addEventListener("keydown",e=>{
    TUTUP DRAWER SAAT KLIK MENU
 ========================= */
 
-document
-.querySelectorAll(".drawer-menu a,.drawer-bottom a")
-.forEach(item=>{
+    homeMenu.onclick=(e)=>{
 
-    item.onclick=()=>{
+    e.preventDefault();
 
-        closeDrawer();
+    showPage(homePage);
 
-    };
+};
 
-});
+bankMenu.onclick=(e)=>{
+
+    e.preventDefault();
+
+    showPage(bankPage);
+
+};
+
+historyMenu.onclick=(e)=>{
+
+    e.preventDefault();
+
+    showPage(historyPage);
+
+};
+
+statisticMenu.onclick=(e)=>{
+
+    e.preventDefault();
+
+    showPage(statisticPage);
+
+};
+
+debtMenu.onclick=(e)=>{
+
+    e.preventDefault();
+
+    showPage(debtPage);
+
+};
+
+settingMenu.onclick=(e)=>{
+
+    e.preventDefault();
+
+    showPage(settingPage);
+
+};
