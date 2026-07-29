@@ -2,7 +2,7 @@
    PxxStudix Service Worker
 ========================================== */
 
-const CACHE_NAME = "pxxstudix-v3";
+const CACHE_NAME = "pxxstudix-v4";
 
 const FILES_TO_CACHE = [
 
