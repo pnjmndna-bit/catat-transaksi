@@ -1,720 +1,945 @@
-/* =========================
-   ELEMENT
-========================= */
+/* ==========================================
+   PXXSTUDI DASHBOARD
+   PART 1
+========================================== */
 
-const title = document.getElementById("title");
-const amount = document.getElementById("amount");
-const category = document.getElementById("category");
+const websiteList = document.getElementById("websiteList");
+const websiteTemplate = document.getElementById("websiteTemplate");
 
-const saveBtn = document.getElementById("saveBtn");
+const websiteModal = document.getElementById("websiteModal");
+const deleteModal = document.getElementById("deleteModal");
 
-const transactionList =
-document.getElementById("transactionList");
+const addWebsite = document.getElementById("addWebsite");
+const fab = document.getElementById("fab");
+const emptyAddBtn = document.getElementById("emptyAddBtn");
 
-const saldo =
-document.getElementById("saldo");
+const closeModal = document.getElementById("closeModal");
+const cancelBtn = document.getElementById("cancelBtn");
+const saveWebsite = document.getElementById("saveWebsite");
 
-const incomeTotal =
-document.getElementById("incomeTotal");
+const searchInput = document.getElementById("searchInput");
 
-const expenseTotal =
-document.getElementById("expenseTotal");
+const loadingScreen = document.getElementById("loadingScreen");
 
-const homePage =
-document.getElementById("homePage");
+const toast = document.getElementById("toast");
+const toastText = document.getElementById("toastText");
 
-const bankPage =
-document.getElementById("bankPage");
+const totalWebsite = document.getElementById("totalWebsite");
+const activeWebsite = document.getElementById("activeWebsite");
+const warningWebsite = document.getElementById("warningWebsite");
+const expiredWebsite = document.getElementById("expiredWebsite");
 
-const historyPage =
-document.getElementById("historyPage");
+const emptyState = document.getElementById("emptyState");
 
-const statisticPage =
-document.getElementById("statisticPage");
+const websiteName = document.getElementById("websiteName");
+const linkName = document.getElementById("linkName");
+const websiteUrl = document.getElementById("websiteUrl");
+const expiredDate = document.getElementById("expiredDate");
+const websiteNote = document.getElementById("websiteNote");
 
-const debtPage =
-document.getElementById("debtPage");
+const todayDate = document.getElementById("todayDate");
 
-const settingPage =
-document.getElementById("settingPage");
+let websites = JSON.parse(localStorage.getItem("pxxstudio_websites")) || [];
 
-const homeMenu =
-document.getElementById("homeMenu");
+let editIndex = -1;
 
-const bankMenu =
-document.getElementById("bankMenu");
+let deleteIndex = -1;
 
-const historyMenu =
-document.getElementById("historyMenu");
+/* ==========================================
+   TANGGAL HARI INI
+========================================== */
 
-const statisticMenu =
-document.getElementById("statisticMenu");
+const today = new Date();
 
-const debtMenu =
-document.getElementById("debtMenu");
+todayDate.innerText =
+today.toLocaleDateString("id-ID",{
 
-const settingMenu =
-document.getElementById("settingMenu");
+weekday:"long",
 
+day:"numeric",
 
-/* =========================
-   TYPE BUTTON
-========================= */
+month:"long",
 
-const incomeBtn =
-document.getElementById("incomeBtn");
+year:"numeric"
 
-const expenseBtn =
-document.getElementById("expenseBtn");
+});
 
-let currentType = "income";
+/* ==========================================
+   LOADING
+========================================== */
 
+window.addEventListener("load",()=>{
 
-/* =========================
-   DRAWER
-========================= */
+setTimeout(()=>{
 
-const menuBtn =
-document.getElementById("menuBtn");
+loadingScreen.classList.add("hide");
 
-const drawer =
-document.getElementById("drawer");
+},800);
 
-const drawerOverlay =
-document.getElementById("drawerOverlay");
+});
 
+/* ==========================================
+   TOAST
+========================================== */
 
-/* =========================
-   LOCAL STORAGE
-========================= */
-let transactions =
-JSON.parse(
-    localStorage.getItem("transactions")
-) || [];
+function showToast(message){
 
-let banks =
-JSON.parse(
-localStorage.getItem("banks")
-) || [
+toastText.innerText = message;
 
-    {
+toast.classList.add("show");
 
-        id:Date.now(),
+setTimeout(()=>{
 
-        name:"Cash",
+toast.classList.remove("show");
 
-        saldo:0
-
-    }
-
-];
-
-function showPage(page){
-
-    document
-    .querySelectorAll(".page")
-    .forEach(item=>{
-
-        item.classList.remove("active");
-
-    });
-
-    page.classList.add("active");
-
-    closeDrawer();
+},2500);
 
 }
 
-/* =========================
-   FORMAT RUPIAH
-========================= */
-
-function rupiah(nominal){
-
-    return "Rp" +
-    Number(nominal)
-    .toLocaleString("id-ID");
-
-}
-
-
-/* =========================
-   SIMPAN
-========================= */
+/* ==========================================
+   SIMPAN DATA
+========================================== */
 
 function saveData(){
 
-    localStorage.setItem(
-        "transactions",
-        JSON.stringify(transactions)
-    );
+localStorage.setItem(
 
-    localStorage.setItem(
-        "banks",
-        JSON.stringify(banks)
-    );
+"pxxstudio_websites",
+
+JSON.stringify(websites)
+
+);
 
 }
 
+/* ==========================================
+   FORMAT TANGGAL
+========================================== */
 
-/* =========================
-   DRAWER OPEN
-========================= */
+function formatDate(date){
 
-menuBtn.onclick = ()=>{
+    if(!date) return "-";
 
-    drawer.classList.add("show");
+    return new Date(date)
 
-    drawerOverlay.classList.add("show");
+    .toLocaleDateString("id-ID",{
 
-    document.body.style.overflow =
-    "hidden";
+        day:"numeric",
 
-};
+        month:"long",
 
-
-/* =========================
-   DRAWER CLOSE
-========================= */
-
-function closeDrawer(){
-
-    drawer.classList.remove("show");
-
-    drawerOverlay.classList.remove("show");
-
-    document.body.style.overflow =
-    "";
-
-}
-
-drawerOverlay.onclick =
-closeDrawer;
-
-
-/* =========================
-   KATEGORI
-========================= */
-
-const incomeCategory = [
-
-    "Gaji",
-
-    "Bonus",
-
-    "Hadiah",
-
-    "Penjualan",
-
-    "Investasi",
-
-    "Lainnya"
-
-];
-
-const expenseCategory = [
-
-    "Makanan",
-
-    "Transport",
-
-    "Belanja",
-
-    "Tagihan",
-
-    "Hiburan",
-
-    "Lainnya"
-
-];
-
-
-/* =========================
-   LOAD CATEGORY
-========================= */
-
-function loadCategory(){
-
-    category.innerHTML = "";
-
-    const data =
-    currentType=="income"
-    ? incomeCategory
-    : expenseCategory;
-
-    data.forEach(item=>{
-
-        category.innerHTML += `
-            <option value="${item}">
-                ${item}
-            </option>
-        `;
+        year:"numeric"
 
     });
 
 }
 
-loadCategory();
+/* ==========================================
+   SELISIH HARI
+========================================== */
 
+function getRemainingDays(date){
 
-/* =========================
-   TYPE BUTTON
-========================= */
+const now = new Date();
 
-incomeBtn.onclick = ()=>{
+now.setHours(0,0,0,0);
 
-    currentType = "income";
+const target = new Date(date);
 
-    incomeBtn.classList.add("active");
+target.setHours(0,0,0,0);
 
-    expenseBtn.classList.remove("active");
+const diff = target - now;
 
-    loadCategory();
+return Math.floor(
+
+diff / 86400000
+
+);
+
+}
+
+/* ==========================================
+   STATUS WEBSITE
+========================================== */
+
+function getStatus(days){
+
+if(days > 7){
+
+return{
+
+text:"Aktif",
+
+class:"status-active"
 
 };
 
+}
 
-expenseBtn.onclick = ()=>{
+if(days >= 0){
 
-    currentType = "expense";
+return{
 
-    expenseBtn.classList.add("active");
+text:days + " Hari Tersisa",
 
-    incomeBtn.classList.remove("active");
-
-    loadCategory();
+class:"status-warning"
 
 };
 
-/* =========================
-   UPDATE SUMMARY
-========================= */
+}
 
-function updateSummary(){
+if(days >= -7){
 
-    let income = 0;
-    let expense = 0;
+return{
 
-    transactions.forEach(item=>{
+text:
 
-        if(item.type=="income"){
+"Toleransi " +
 
-            income += item.amount;
+Math.abs(days) +
+
+" Hari",
+
+class:"status-tolerance"
+
+};
+
+}
+
+return{
+
+text:"Expired",
+
+class:"status-expired"
+
+};
+
+}
+
+/* ==========================================
+   UPDATE DASHBOARD
+========================================== */
+
+function updateDashboard(){
+
+    totalWebsite.textContent = websites.length;
+
+    let aktif = 0;
+    let warning = 0;
+    let expired = 0;
+
+    websites.forEach(item=>{
+
+        const days =
+        getRemainingDays(item.expiredDate);
+
+        if(days > 7){
+
+            aktif++;
+
+        }else if(days >= -7){
+
+            warning++;
 
         }else{
 
-            expense += item.amount;
+            expired++;
 
         }
 
     });
 
-    incomeTotal.textContent =
-    rupiah(income);
+    activeWebsite.textContent = aktif;
 
-    expenseTotal.textContent =
-    rupiah(expense);
+    warningWebsite.textContent = warning;
 
-    saldo.textContent =
-    rupiah(income-expense);
+    expiredWebsite.textContent = expired;
 
 }
 
+/* ==========================================
+   EMPTY STATE
+========================================== */
 
-/* =========================
-   RENDER
-========================= */
+function updateEmptyState(){
 
-function render(){
+    if(websites.length===0){
 
-    transactionList.innerHTML = "";
+        emptyState.style.display="block";
 
-    if(transactions.length==0){
+        websiteList.style.display="none";
 
-        transactionList.innerHTML = `
-            <div class="empty">
-                Belum ada transaksi.
-            </div>
+    }else{
+
+        emptyState.style.display="none";
+
+        websiteList.style.display="grid";
+
+    }
+
+}
+
+/* ==========================================
+   SORT BERDASARKAN TANGGAL
+========================================== */
+
+function sortWebsite(){
+
+    websites.sort((a,b)=>{
+
+        return new Date(a.expiredDate)
+
+        -
+
+        new Date(b.expiredDate);
+
+    });
+
+}
+
+/* ==========================================
+   CHECKLIST HTML
+========================================== */
+
+function createMonthHTML(months = []){
+
+    let html = "";
+
+    for(let i=1;i<=12;i++){
+
+        html += `
+        <button
+        class="month-box ${months.includes(i) ? "checked" : ""}"
+        data-month="${i}">
+            <i class="fa-solid fa-check"></i>
+        </button>
         `;
 
-        updateSummary();
-
-        return;
-
     }
 
-    transactions
-.slice(0,10)
-.forEach(item=>{
-
-    transactionList.innerHTML += `
-
-    <div class="transaction-item">
-
-        <div class="transaction-left">
-
-            <div class="transaction-icon ${item.type}">
-
-                ${
-                    item.type=="income"
-                    ? `
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 18V6M12 6L7 11M12 6L17 11"
-                        stroke="currentColor"
-                        stroke-width="2.3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"/>
-                    </svg>
-                    `
-                    :
-                    `
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 6V18M12 18L7 13M12 18L17 13"
-                        stroke="currentColor"
-                        stroke-width="2.3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"/>
-                    </svg>
-                    `
-                }
-
-            </div>
-
-            <div class="transaction-info">
-
-    <h4>${item.title}</h4>
-
-    <p>${item.date}</p>
-
-    <div class="transaction-category">
-        ${item.category}
-    </div>
-
-</div>
-
-        </div>
-
-        <div class="transaction-right">
-
-            <div class="transaction-amount ${item.type}">
-
-                ${item.type=="income" ? "+" : "-"}
-
-                ${rupiah(item.amount)}
-
-            </div>
-
-            <button
-            class="delete-btn"
-            onclick="removeTransaction('${item.id}')">
-
-                ✕
-
-            </button>
-
-        </div>
-
-    </div>
-
-    `;
-
-});
-
-    updateSummary();
+    return html;
 
 }
 
+/* ==========================================
+   PROGRESS BAR
+========================================== */
 
-/* =========================
-   TAMBAH TRANSAKSI
-========================= */
+function progressWidth(days){
 
-saveBtn.onclick = ()=>{
+    if(days<=0) return 100;
 
-    const nama =
-    title.value.trim();
-
-    const nominal =
-    Number(amount.value);
-
-    if(
-
-        nama==""
-
-        ||
-
-        nominal<=0
-
-    ){
-
-        alert("Lengkapi data terlebih dahulu.");
-
-        return;
-
-    }
-
-    const data = {
-
-        id:
-        Date.now().toString(),
-
-        title:nama,
-
-        category:
-        category.value,
-
-        amount:nominal,
-
-        type:
-        currentType,
-
-        date:
-        new Date()
-        .toLocaleString("id-ID")
-
-    };
-
-    transactions.unshift(data);
-
-    saveData();
-
-    render();
-
-    title.value = "";
-
-    amount.value = "";
-
-    title.focus();
-
-};
-
-
-/* =========================
-   LOAD
-========================= */
-
-render();
-
-/* =========================
-   HAPUS TRANSAKSI
-========================= */
-
-function removeTransaction(id){
-
-    const ok = confirm(
-        "Yakin ingin menghapus transaksi ini?"
+    return Math.max(
+        10,
+        100-(days/30*100)
     );
 
-    if(!ok){
-
-        return;
-
-    }
-
-    transactions = transactions.filter(item=>{
-
-        return item.id !== id;
-
-    });
-
-    saveData();
-
-    render();
-
 }
 
+/* ==========================================
+   RENDER WEBSITE
+========================================== */
 
-/* =========================
-   HAPUS SEMUA
-========================= */
+function renderWebsite(){
 
-const clearAll =
-document.getElementById("clearAll");
+    websiteList.innerHTML="";
 
-if(clearAll){
+    sortWebsite();
 
-    clearAll.onclick = ()=>{
+    updateDashboard();
 
-        if(transactions.length==0){
+    updateEmptyState();
 
-            alert("Belum ada transaksi.");
+    websites.forEach((item,index)=>{
 
-            return;
+        const clone =
 
-        }
+        websiteTemplate
 
-        const ok = confirm(
-            "Hapus semua transaksi?"
+        .content
+
+        .cloneNode(true);
+
+        const card =
+
+        clone.querySelector(
+
+        ".website-card"
+
         );
 
-        if(!ok){
+        const status =
 
-            return;
+        getStatus(
+
+        getRemainingDays(
+
+        item.expiredDate
+
+        )
+
+        );
+
+        card.querySelector(
+
+        ".name"
+
+        ).textContent=
+
+        item.name;
+
+        card.querySelector(
+
+        ".link-name"
+
+        ).textContent=
+
+        item.linkName;
+
+        const url =
+
+        card.querySelector(
+
+        ".website-url"
+
+        );
+
+        url.href=item.url;
+
+        url.querySelector(
+
+        "span"
+
+        ).textContent=
+
+        item.url;
+
+        card.querySelector(
+
+        ".expired-date"
+
+        ).textContent=
+
+        formatDate(
+
+        item.expiredDate
+
+        );
+
+        card.querySelector(
+
+        ".remaining-day"
+
+        ).textContent=
+
+        status.text;
+
+        const badge=
+
+        card.querySelector(
+
+        ".status-badge"
+
+        );
+
+        badge.textContent=
+
+        status.text;
+
+        badge.classList.add(
+
+        status.class
+
+        );
+
+        card.querySelector(
+
+        ".note-text"
+
+        ).textContent=
+
+        item.note ||
+
+        "-";
+
+        card.querySelector(
+
+        ".month-list"
+
+        ).innerHTML=
+
+        createMonthHTML(
+
+        item.months || []
+
+        );
+
+      card.querySelectorAll(".month-box").forEach(box=>{
+
+    box.onclick=()=>{
+
+        const month = Number(box.dataset.month);
+
+        if(!item.months){
+
+            item.months=[];
 
         }
 
-        transactions = [];
+        if(item.months.includes(month)){
+
+            item.months=item.months.filter(m=>m!==month);
+
+            box.classList.remove("checked");
+
+        }else{
+
+            item.months.push(month);
+
+            box.classList.add("checked");
+
+        }
 
         saveData();
 
-        render();
-
     };
 
-}
-
-
-/* =========================
-   ENTER
-========================= */
-
-title.addEventListener("keypress",e=>{
-
-    if(e.key==="Enter"){
-
-        amount.focus();
-
-    }
-
 });
 
-amount.addEventListener("keypress",e=>{
+       const days =
+getRemainingDays(item.expiredDate);
 
-    if(e.key==="Enter"){
+const progress =
+card.querySelector(".progress-fill");
 
-        saveBtn.click();
+progress.style.width =
+progressWidth(days)+"%";
 
-    }
+updateProgressColor(progress,days);
 
-});
+      // Tombol Buka
+card.querySelector(".open-btn").onclick = () => {
+    window.open(item.url, "_blank");
+};
 
+// Tombol Edit
+card.querySelector(".edit-btn").onclick = () => {
 
-/* =========================
-   ANIMASI ITEM
-========================= */
+    editIndex = index;
 
-function animateItems(){
+    websiteName.value = item.name;
+    linkName.value = item.linkName;
+    websiteUrl.value = item.url;
+    expiredDate.value = item.expiredDate;
+    websiteNote.value = item.note || "";
 
-    const items =
-document.querySelectorAll(".transaction-item");
+    document.querySelectorAll(".month-grid input").forEach(check=>{
+        check.checked = item.months?.includes(Number(check.value));
+    });
 
-    items.forEach((item,index)=>{
+    document.getElementById("modalTitle").innerHTML = `
+    <i class="fa-solid fa-pen"></i>
+    Edit Website
+    `;
 
-        item.style.opacity="0";
+    openModal(true);
 
-        item.style.transform=
-        "translateY(12px)";
+};
 
-        setTimeout(()=>{
+// Tombol Hapus
+card.querySelector(".delete-btn").onclick = () => {
 
-            item.style.transition=
-            ".35s ease";
+    deleteIndex = index;
 
-            item.style.opacity="1";
+    deleteModal.classList.add("active");
 
-            item.style.transform=
-            "translateY(0)";
+};
 
-        },index*50);
+        websiteList.appendChild(
+
+        clone
+
+        );
 
     });
 
 }
 
+/* ==========================================
+   BUKA MODAL
+========================================== */
 
-/* =========================
-   RENDER ULANG
-========================= */
+function openModal(edit = false){
 
-const oldRender = render;
+    websiteModal.classList.add("active");
 
-render = function(){
+    if(!edit){
 
-    oldRender();
+        editIndex = -1;
 
-    animateItems();
+        document.getElementById("modalTitle").innerHTML = `
+        <i class="fa-solid fa-globe"></i>
+        Tambah Website
+        `;
 
-};
+        websiteName.value = "";
+        linkName.value = "";
+        websiteUrl.value = "";
+        expiredDate.value = "";
+        websiteNote.value = "";
 
+        document
+        .querySelectorAll(".month-grid input")
+        .forEach(item=>item.checked=false);
 
-/* =========================
-   LOAD
-========================= */
+    }
 
-render();
+}
 
+/* ==========================================
+   TUTUP MODAL
+========================================== */
 
-/* =========================
-   ESC TUTUP DRAWER
-========================= */
+function closeWebsiteModal(){
 
-document.addEventListener("keydown",e=>{
+    websiteModal.classList.remove("active");
+
+}
+
+/* ==========================================
+   TAMBAH DATA
+========================================== */
+
+function addData(){
+
+    const months = [];
+
+    document
+    .querySelectorAll(".month-grid input")
+    .forEach(item=>{
+
+        if(item.checked){
+
+            months.push(
+
+                Number(item.dataset.month || item.value)
+
+            );
+
+        }
+
+    });
+
+    websites.push({
+
+        id:Date.now(),
+
+        name:websiteName.value.trim(),
+
+        linkName:linkName.value.trim(),
+
+        url: websiteUrl.value.trim().startsWith("http")
+    ? websiteUrl.value.trim()
+    : "https://" + websiteUrl.value.trim(),
+
+        expiredDate:expiredDate.value,
+
+        note:websiteNote.value.trim(),
+
+        months
+
+    });
+
+    saveData();
+
+    renderWebsite();
+
+    closeWebsiteModal();
+
+    showToast("Website berhasil ditambahkan");
+
+}
+
+/* ==========================================
+   EDIT DATA
+========================================== */
+
+function updateData(){
+
+    const months=[];
+
+    document
+    .querySelectorAll(".month-grid input")
+    .forEach(item=>{
+
+        if(item.checked){
+
+            months.push(
+
+                Number(item.dataset.month || item.value)
+
+            );
+
+        }
+
+    });
+
+    websites[editIndex]={
+
+        ...websites[editIndex],
+
+        name:websiteName.value.trim(),
+
+        linkName:linkName.value.trim(),
+
+        url: websiteUrl.value.trim().startsWith("http")
+    ? websiteUrl.value.trim()
+    : "https://" + websiteUrl.value.trim(),
+
+        expiredDate:expiredDate.value,
+
+        note:websiteNote.value.trim(),
+
+        months
+
+    };
+
+    saveData();
+
+    renderWebsite();
+
+    closeWebsiteModal();
+
+    showToast("Website berhasil diperbarui");
+
+}
+
+/* ==========================================
+   SIMPAN
+========================================== */
+
+saveWebsite.addEventListener("click",()=>{
 
     if(
 
-        e.key==="Escape"
+        websiteName.value.trim()==="" ||
 
-        &&
+        websiteUrl.value.trim()==="" ||
 
-        drawer.classList.contains("show")
+        expiredDate.value===""
 
     ){
 
-        closeDrawer();
+        showToast("Lengkapi data terlebih dahulu");
+
+        return;
+
+    }
+
+    if(editIndex===-1){
+
+        addData();
+
+    }else{
+
+        updateData();
 
     }
 
 });
 
+/* ==========================================
+   BUKA MODAL
+========================================== */
 
-/* =========================
-   TUTUP DRAWER SAAT KLIK MENU
-========================= */
+addWebsite.onclick = openModal;
 
-    homeMenu.onclick=(e)=>{
+fab.onclick = openModal;
 
-    e.preventDefault();
+emptyAddBtn.onclick = openModal;
 
-    showPage(homePage);
+closeModal.onclick = closeWebsiteModal;
+
+cancelBtn.onclick = closeWebsiteModal;
+
+/* ==========================================
+   PERPANJANG 1 BULAN
+========================================== */
+
+function addOneMonth(date){
+
+    const d = new Date(date);
+
+    d.setMonth(d.getMonth()+1);
+
+    return d.toISOString().split("T")[0];
+
+}
+
+/* ==========================================
+   COPY LINK
+========================================== */
+
+async function copyLink(url){
+
+    try{
+
+        await navigator.clipboard.writeText(url);
+
+        showToast("Link berhasil disalin");
+
+    }catch{
+
+        showToast("Gagal menyalin link");
+
+    }
+
+}
+
+/* ==========================================
+   UPDATE PROGRESS COLOR
+========================================== */
+
+function updateProgressColor(bar,days){
+
+    if(days>7){
+
+        bar.style.background =
+        "linear-gradient(90deg,#22c55e,#16a34a)";
+
+        return;
+
+    }
+
+    if(days>=0){
+
+        bar.style.background =
+        "linear-gradient(90deg,#f59e0b,#f97316)";
+
+        return;
+
+    }
+
+    if(days>=-7){
+
+        bar.style.background =
+        "linear-gradient(90deg,#8b5cf6,#7c3aed)";
+
+        return;
+
+    }
+
+    bar.style.background =
+    "linear-gradient(90deg,#ef4444,#dc2626)";
+
+}
+
+/* ==========================================
+   CLOSE MODAL CLICK OUTSIDE
+========================================== */
+
+websiteModal.addEventListener("click",(e)=>{
+
+    if(e.target===websiteModal){
+
+        closeWebsiteModal();
+
+    }
+
+});
+
+deleteModal.addEventListener("click",(e)=>{
+
+    if(e.target===deleteModal){
+
+        deleteModal.classList.remove("active");
+
+    }
+
+});
+
+/* ==========================================
+   ESC KEY
+========================================== */
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Escape"){
+
+        closeWebsiteModal();
+
+        deleteModal.classList.remove("active");
+
+    }
+
+});
+
+/* ==========================================
+   AUTO BACKUP
+========================================== */
+
+function exportBackup(){
+
+    return JSON.stringify(websites,null,2);
+
+}
+
+window.addEventListener("beforeunload",()=>{
+
+    saveData();
+
+});
+
+document.getElementById("cancelDelete").onclick=()=>{
+
+    deleteModal.classList.remove("active");
 
 };
 
-bankMenu.onclick=(e)=>{
+document.getElementById("confirmDelete").onclick=()=>{
 
-    e.preventDefault();
+    websites.splice(deleteIndex,1);
 
-    showPage(bankPage);
+    saveData();
 
-};
+    renderWebsite();
 
-historyMenu.onclick=(e)=>{
+    deleteModal.classList.remove("active");
 
-    e.preventDefault();
-
-    showPage(historyPage);
+    showToast("Website berhasil dihapus");
 
 };
 
-statisticMenu.onclick=(e)=>{
+renderWebsite();
 
-    e.preventDefault();
+searchInput.addEventListener("input",e=>{
 
-    showPage(statisticPage);
+    const keyword =
 
-};
+    e.target.value.toLowerCase();
 
-debtMenu.onclick=(e)=>{
+    document
 
-    e.preventDefault();
+    .querySelectorAll(".website-card")
 
-    showPage(debtPage);
+    .forEach(card=>{
 
-};
+        card.style.display =
 
-settingMenu.onclick=(e)=>{
+        card.innerText
 
-    e.preventDefault();
+        .toLowerCase()
 
-    showPage(settingPage);
+        .includes(keyword)
 
-};
+        ?
+
+        ""
+
+        :
+
+        "none";
+
+    });
+
+});
