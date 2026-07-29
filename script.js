@@ -32,7 +32,7 @@ const expiredWebsite = document.getElementById("expiredWebsite");
 const emptyState = document.getElementById("emptyState");
 
 const websiteName = document.getElementById("websiteName");
-const linkName = document.getElementById("linkName");
+const backupUrl = document.getElementById("backupUrl");
 const websiteUrl = document.getElementById("websiteUrl");
 const expiredDate = document.getElementById("expiredDate");
 const websiteNote = document.getElementById("websiteNote");
@@ -298,30 +298,6 @@ function sortWebsite(){
 }
 
 /* ==========================================
-   CHECKLIST HTML
-========================================== */
-
-function createMonthHTML(months = []){
-
-    let html = "";
-
-    for(let i=1;i<=12;i++){
-
-        html += `
-        <button
-        class="month-box ${months.includes(i) ? "checked" : ""}"
-        data-month="${i}">
-            <i class="fa-solid fa-check"></i>
-        </button>
-        `;
-
-    }
-
-    return html;
-
-}
-
-/* ==========================================
    PROGRESS BAR
 ========================================== */
 
@@ -388,13 +364,12 @@ function renderWebsite(){
 
         item.name;
 
-        card.querySelector(
+        const backup = card.querySelector(".website-backup");
 
-        ".link-name"
+backup.href = item.backupUrl || "#";
 
-        ).textContent=
-
-        item.linkName;
+backup.querySelector("span").textContent =
+item.backupUrl || "Belum ada URL Backup";
 
         const url =
 
@@ -462,50 +437,6 @@ function renderWebsite(){
 
         "-";
 
-        card.querySelector(
-
-        ".month-list"
-
-        ).innerHTML=
-
-        createMonthHTML(
-
-        item.months || []
-
-        );
-
-      card.querySelectorAll(".month-box").forEach(box=>{
-
-    box.onclick=()=>{
-
-        const month = Number(box.dataset.month);
-
-        if(!item.months){
-
-            item.months=[];
-
-        }
-
-        if(item.months.includes(month)){
-
-            item.months=item.months.filter(m=>m!==month);
-
-            box.classList.remove("checked");
-
-        }else{
-
-            item.months.push(month);
-
-            box.classList.add("checked");
-
-        }
-
-        saveData();
-
-    };
-
-});
-
        const days =
 getRemainingDays(item.expiredDate);
 
@@ -528,14 +459,11 @@ card.querySelector(".edit-btn").onclick = () => {
     editIndex = index;
 
     websiteName.value = item.name;
-    linkName.value = item.linkName;
+    backupUrl.value =
+item.backupUrl || "";
     websiteUrl.value = item.url;
     expiredDate.value = item.expiredDate;
     websiteNote.value = item.note || "";
-
-    document.querySelectorAll(".month-grid input").forEach(check=>{
-        check.checked = item.months?.includes(Number(check.value));
-    });
 
     document.getElementById("modalTitle").innerHTML = `
     <i class="fa-solid fa-pen"></i>
@@ -586,14 +514,10 @@ function openModal(edit = false){
         `;
 
         websiteName.value = "";
-        linkName.value = "";
+        backupUrl.value = "";
         websiteUrl.value = "";
         expiredDate.value = "";
         websiteNote.value = "";
-
-        document
-        .querySelectorAll(".month-grid input")
-        .forEach(item=>item.checked=false);
 
     }
 
@@ -615,31 +539,20 @@ function closeWebsiteModal(){
 
 function addData(){
 
-    const months = [];
-
-    document
-    .querySelectorAll(".month-grid input")
-    .forEach(item=>{
-
-        if(item.checked){
-
-            months.push(
-
-                Number(item.dataset.month || item.value)
-
-            );
-
-        }
-
-    });
-
     websites.push({
 
         id:Date.now(),
 
         name:websiteName.value.trim(),
 
-        linkName:linkName.value.trim(),
+        backupUrl:
+backupUrl.value.trim()
+? (
+    backupUrl.value.trim().startsWith("http")
+    ? backupUrl.value.trim()
+    : "https://" + backupUrl.value.trim()
+)
+: "",
 
         url: websiteUrl.value.trim().startsWith("http")
     ? websiteUrl.value.trim()
@@ -648,8 +561,6 @@ function addData(){
         expiredDate:expiredDate.value,
 
         note:websiteNote.value.trim(),
-
-        months
 
     });
 
@@ -669,31 +580,19 @@ function addData(){
 
 function updateData(){
 
-    const months=[];
-
-    document
-    .querySelectorAll(".month-grid input")
-    .forEach(item=>{
-
-        if(item.checked){
-
-            months.push(
-
-                Number(item.dataset.month || item.value)
-
-            );
-
-        }
-
-    });
-
     websites[editIndex]={
 
         ...websites[editIndex],
 
         name:websiteName.value.trim(),
 
-        linkName:linkName.value.trim(),
+        backupUrl:
+backupUrl.value.trim().startsWith("http")
+?
+backupUrl.value.trim()
+:
+"https://" +
+backupUrl.value.trim(),
 
         url: websiteUrl.value.trim().startsWith("http")
     ? websiteUrl.value.trim()
@@ -703,7 +602,6 @@ function updateData(){
 
         note:websiteNote.value.trim(),
 
-        months
 
     };
 
