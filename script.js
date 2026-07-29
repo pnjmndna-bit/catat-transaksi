@@ -35,7 +35,6 @@ const websiteName = document.getElementById("websiteName");
 const backupUrl = document.getElementById("backupUrl");
 const websiteUrl = document.getElementById("websiteUrl");
 const expiredDate = document.getElementById("expiredDate");
-const websiteNote = document.getElementById("websiteNote");
 
 const todayDate = document.getElementById("todayDate");
 
@@ -427,16 +426,6 @@ item.backupUrl || "Belum ada URL Backup";
 
         );
 
-        card.querySelector(
-
-        ".note-text"
-
-        ).textContent=
-
-        item.note ||
-
-        "-";
-
        const days =
 getRemainingDays(item.expiredDate);
 
@@ -463,7 +452,6 @@ card.querySelector(".edit-btn").onclick = () => {
 item.backupUrl || "";
     websiteUrl.value = item.url;
     expiredDate.value = item.expiredDate;
-    websiteNote.value = item.note || "";
 
     document.getElementById("modalTitle").innerHTML = `
     <i class="fa-solid fa-pen"></i>
@@ -517,7 +505,6 @@ function openModal(edit = false){
         backupUrl.value = "";
         websiteUrl.value = "";
         expiredDate.value = "";
-        websiteNote.value = "";
 
     }
 
@@ -560,8 +547,6 @@ backupUrl.value.trim()
 
         expiredDate:expiredDate.value,
 
-        note:websiteNote.value.trim(),
-
     });
 
     saveData();
@@ -599,8 +584,6 @@ backupUrl.value.trim(),
     : "https://" + websiteUrl.value.trim(),
 
         expiredDate:expiredDate.value,
-
-        note:websiteNote.value.trim(),
 
 
     };
