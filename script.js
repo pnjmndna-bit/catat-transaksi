@@ -233,11 +233,11 @@ function updateDashboard(){
         const days =
         getRemainingDays(item.expiredDate);
 
-        if(days > 3){
+        if(days > 1){
 
             aktif++;
 
-        }else if(days >= -3){
+        }else if(days >= -1){
 
             warning++;
 
@@ -703,7 +703,7 @@ async function copyLink(url){
 
 function updateProgressColor(bar,days){
 
-    if(days>7){
+    if(days>5){
 
         bar.style.background =
         "linear-gradient(90deg,#22c55e,#16a34a)";
@@ -721,7 +721,7 @@ function updateProgressColor(bar,days){
 
     }
 
-    if(days>=-7){
+    if(days>=-5){
 
         bar.style.background =
         "linear-gradient(90deg,#8b5cf6,#7c3aed)";
