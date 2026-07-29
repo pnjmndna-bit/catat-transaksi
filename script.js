@@ -1036,3 +1036,32 @@ searchInput.addEventListener("input",e=>{
 
 });
 
+/* ==========================================
+   REGISTER SERVICE WORKER
+========================================== */
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", async () => {
+
+        try {
+
+            const registration = await navigator.serviceWorker.register("./sw.js");
+
+            console.log("✅ Service Worker berhasil didaftarkan");
+
+            registration.addEventListener("updatefound", () => {
+
+                console.log("Versi baru aplikasi tersedia.");
+
+            });
+
+        } catch (err) {
+
+            console.error("❌ Gagal mendaftarkan Service Worker", err);
+
+        }
+
+    });
+
+}
