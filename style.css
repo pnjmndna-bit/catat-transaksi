@@ -796,7 +796,7 @@ RESPONSIVE
 }
 
 /* ===================================================
-TOP
+   TOP ULTRA PREMIUM V2
 =================================================== */
 
 .card-top{
@@ -807,7 +807,17 @@ TOP
 
     align-items:flex-start;
 
-    gap:12px;
+    gap:8px;
+
+    margin-bottom:10px;
+
+}
+
+.website-info{
+
+    flex:1;
+
+    min-width:0;
 
 }
 
@@ -817,81 +827,221 @@ TOP
 
     align-items:center;
 
-    gap:8px;
+    gap:7px;
 
-    font-size:17px;
+    min-width:0;
+
+    font-size:13px;
 
     font-weight:700;
 
-    line-height:1.3;
+    color:#f8fafc;
 
-    word-break:break-word;
+    letter-spacing:.2px;
+
+    line-height:1.2;
+
+}
+
+.website-title span:last-child{
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
 
 }
 
 .website-title i{
 
-    color:#3b82f6;
+    flex-shrink:0;
 
-    font-size:16px;
+    width:22px;
 
-}
-
-.website-link-name{
-
-    margin-top:6px;
+    height:22px;
 
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    justify-content:center;
 
-    font-size:12px;
+    border-radius:6px;
 
-    color:#94a3b8;
+    background:
+    linear-gradient(145deg,
+    rgba(59,130,246,.18),
+    rgba(59,130,246,.05));
+
+    border:1px solid rgba(96,165,250,.12);
+
+    color:#7dd3fc;
+
+    font-size:10px;
+
+    box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 4px 12px rgba(59,130,246,.12);
 
 }
 
-.website-link-name i{
+/* ===========================
+   BACKUP URL
+=========================== */
 
-    color:#f59e0b;
+.website-backup{
 
-    font-size:12px;
+    margin-top:5px;
 
-}
-
-.website-url{
-
-    margin-top:8px;
-
-    display:inline-flex;
+    display:flex;
 
     align-items:center;
 
-    gap:8px;
+    gap:5px;
 
-    color:#60a5fa;
+    width:100%;
 
-    font-size:12px;
+    padding:5px 9px;
+
+    border-radius:9px;
+
+    background:
+    linear-gradient(145deg,
+    rgba(34,197,94,.08),
+    rgba(34,197,94,.02));
+
+    border:1px solid rgba(34,197,94,.10);
+
+    color:#4ade80;
+
+    font-size:9px;
+
+    font-weight:500;
 
     text-decoration:none;
 
-    word-break:break-all;
+    overflow:hidden;
 
     transition:.25s;
 
 }
 
-.website-url:hover{
+.website-backup span{
 
-    color:#93c5fd;
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+}
+
+.website-backup i{
+
+    flex-shrink:0;
+
+    font-size:8px;
+
+}
+
+.website-backup:hover{
+
+    background:
+
+    rgba(34,197,94,.13);
+
+    border-color:
+
+    rgba(74,222,128,.25);
+
+    transform:translateY(-1px);
+
+    box-shadow:
+
+    0 6px 14px rgba(34,197,94,.12);
+
+}
+
+/* ===========================
+   URL UTAMA
+=========================== */
+
+.website-url{
+
+    margin-top:5px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    width:100%;
+
+    padding:5px 9px;
+
+    border-radius:9px;
+
+    background:
+
+    linear-gradient(145deg,
+
+    rgba(59,130,246,.08),
+
+    rgba(59,130,246,.02));
+
+    border:1px solid rgba(59,130,246,.10);
+
+    color:#7dd3fc;
+
+    font-size:9px;
+
+    font-weight:500;
+
+    text-decoration:none;
+
+    overflow:hidden;
+
+    transition:.25s;
+
+}
+
+.website-url span{
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
 
 }
 
 .website-url i{
 
-    font-size:12px;
+    flex-shrink:0;
+
+    font-size:8px;
+
+}
+
+.website-url:hover{
+
+    background:
+
+    rgba(59,130,246,.13);
+
+    border-color:
+
+    rgba(96,165,250,.25);
+
+    color:#dbeafe;
+
+    transform:translateY(-1px);
+
+    box-shadow:
+
+    0 6px 14px rgba(59,130,246,.12);
 
 }
 
