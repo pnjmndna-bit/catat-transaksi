@@ -233,11 +233,11 @@ function updateDashboard(){
         const days =
         getRemainingDays(item.expiredDate);
 
-        if(days > 7){
+        if(days > 3){
 
             aktif++;
 
-        }else if(days >= -7){
+        }else if(days >= -3){
 
             warning++;
 
@@ -555,11 +555,14 @@ card.querySelector(".delete-btn").onclick = () => {
 
 };
 
-        websiteList.appendChild(
+// TAMBAH BARIS INI
+startTyping(card);
 
-        clone
+websiteList.appendChild(
 
-        );
+clone
+
+);
 
     });
 
@@ -910,6 +913,95 @@ document.getElementById("confirmDelete").onclick=()=>{
 
 };
 
+/* ==========================================
+   CODE TYPING
+========================================== */
+
+const codeLines = [
+
+'const app = "PxxStudix";',
+'const version = "v3.0";',
+'',
+'fetch("/api/dashboard");',
+'await response.json();',
+'',
+'https://pxxstudix.com',
+'https://api.pxxstudix.com',
+'',
+'Build completed successfully ✔',
+'Deploy completed ✔',
+'Ready in 286ms',
+'',
+'> System Ready',
+'> Waiting request...',
+'> Monitoring server...',
+'> Watching files...',
+'> Listening on port 3000',
+'> No errors detected.',
+'> Security Scan Passed.',
+'> SSL Certificate Valid.',
+'> Uptime 99.99%',
+'> Memory Usage 34%',
+'> CPU Usage 12%',
+'> CDN Connected',
+'> Auto Backup Enabled'
+
+];
+
+function startTyping(card){
+
+    const pre = card.querySelector(".typing-code");
+
+    if(!pre) return;
+
+    let line = 0;
+    let char = 0;
+
+    function type(){
+
+        if(line >= codeLines.length){
+
+            setTimeout(()=>{
+
+                pre.textContent = "";
+
+                line = 0;
+                char = 0;
+
+                type();
+
+            },1500);
+
+            return;
+
+        }
+
+        if(char < codeLines[line].length){
+
+            pre.textContent += codeLines[line][char];
+
+            char++;
+
+            setTimeout(type,35);
+
+        }else{
+
+            pre.textContent += "\n";
+
+            line++;
+
+            char = 0;
+
+            setTimeout(type,200);
+
+        }
+
+    }
+
+    type();
+
+}
+
 renderWebsite();
 
 searchInput.addEventListener("input",e=>{
@@ -943,3 +1035,4 @@ searchInput.addEventListener("input",e=>{
     });
 
 });
+
