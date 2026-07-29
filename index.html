@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>PxxStudi Dashboard</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"/>
+
+<!-- Google Font -->
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="style.css">
+
+</head>
+
+<body>
+
+<!-- Background -->
+<div class="bg-blur blur1"></div>
+<div class="bg-blur blur2"></div>
+<div class="bg-blur blur3"></div>
+
+<!-- =======================
+HEADER
+======================= -->
+
+<header class="header">
+
+<div class="logo-box">
+
+<div class="logo">
+
+<img src="assets/logo.png"
+id="logo">
+
+</div>
+
+<div class="title">
+
+<h1>PxxStudix</h1>
+
+<p>
+Website Management Dashboard
+</p>
+
+</div>
+
+</div>
+
+<div class="header-right">
+
+<div class="today">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<span id="todayDate">
+29 Juli 2026
+</span>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- =======================
+DASHBOARD
+======================= -->
+
+<section class="dashboard">
+
+<div class="card total">
+
+<div class="icon">
+
+<i class="fa-solid fa-globe"></i>
+
+</div>
+
+<div class="content">
+
+<h3>Total Website</h3>
+
+<h2 id="totalWebsite">
+0
+</h2>
+
+</div>
+
+</div>
+
+<div class="card active">
+
+<div class="icon">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<div class="content">
+
+<h3>Aktif</h3>
+
+<h2 id="activeWebsite">
+0
+</h2>
+
+</div>
+
+</div>
+
+<div class="card warning">
+
+<div class="icon">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+</div>
+
+<div class="content">
+
+<h3>Hampir Habis</h3>
+
+<h2 id="warningWebsite">
+0
+</h2>
+
+</div>
+
+</div>
+
+<div class="card expired">
+
+<div class="icon">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+</div>
+
+<div class="content">
+
+<h3>Expired</h3>
+
+<h2 id="expiredWebsite">
+0
+</h2>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =======================
+SEARCH
+======================= -->
+
+<section class="search-box">
+
+<div class="search">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Cari Website...">
+
+</div>
+
+<button
+class="add-btn"
+id="addWebsite">
+
+<i class="fa-solid fa-plus"></i>
+
+<span>
+Tambah
+</span>
+
+</button>
+
+</section>
+
+<!-- =======================
+LIST WEBSITE
+======================= -->
+
+<section
+class="website-list"
+id="websiteList">
+
+<!-- Semua card akan dibuat otomatis oleh JavaScript -->
+
+</section>
+
+<!-- =======================
+MODAL TAMBAH / EDIT
+======================= -->
+
+<div class="modal" id="websiteModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                <i class="fa-solid fa-globe"></i>
+                Tambah Website
+            </h2>
+
+            <button class="close-modal" id="closeModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-group">
+
+                <label>
+                    <i class="fa-solid fa-signature"></i>
+                    Nama Pemilik
+                </label>
+
+                <input
+                type="text"
+                id="websiteName"
+                placeholder="Contoh : Website Login">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    <i class="fa-solid fa-tag"></i>
+                    Nama Link
+                </label>
+
+                <input
+                type="text"
+                id="linkName"
+                placeholder="Contoh : Login Admin">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    <i class="fa-solid fa-link"></i>
+                    URL Website
+                </label>
+
+                <input
+                type="url"
+                id="websiteUrl"
+                placeholder="https://">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Tanggal Habis
+                </label>
+
+                <input
+                type="date"
+                id="expiredDate">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    <i class="fa-solid fa-note-sticky"></i>
+                    Catatan
+                </label>
+
+                <textarea
+                id="websiteNote"
+                rows="4"
+                placeholder="Tambahkan catatan..."></textarea>
+
+            </div>
+
+            <!-- =======================
+            CHECKLIST BULAN
+            ======================= -->
+
+            <div class="form-group">
+
+                <label>
+
+                    <i class="fa-solid fa-list-check"></i>
+
+                    Checklist Langganan
+
+                </label>
+
+                <div class="month-grid">
+
+                    
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+            class="cancel-btn"
+            id="cancelBtn">
+
+                <i class="fa-solid fa-ban"></i>
+
+                Batal
+
+            </button>
+
+            <button
+            class="save-btn"
+            id="saveWebsite">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Simpan
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =======================
+FLOAT BUTTON
+======================= -->
+
+<button
+class="fab"
+id="fab">
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+<!-- =======================
+LOADING
+======================= -->
+
+<div class="loading-screen"
+id="loadingScreen">
+
+<div class="loader"></div>
+
+<p>Memuat Dashboard...</p>
+
+</div>
+
+<!-- =======================
+TOAST
+======================= -->
+
+<div
+class="toast"
+id="toast">
+
+<i
+class="fa-solid fa-circle-check">
+</i>
+
+<span
+id="toastText">
+
+Berhasil disimpan
+
+</span>
+
+</div>
+
+<!-- =======================
+EMPTY STATE
+======================= -->
+
+<div class="empty-state" id="emptyState">
+
+    <div class="empty-icon">
+
+        <i class="fa-solid fa-folder-open"></i>
+
+    </div>
+
+    <h2>Belum Ada Website</h2>
+
+    <p>
+
+        Klik tombol <strong>Tambah</strong> untuk
+        menambahkan website pertama.
+
+    </p>
+
+    <button
+    class="empty-btn"
+    id="emptyAddBtn">
+
+        <i class="fa-solid fa-plus"></i>
+
+        Tambah Website
+
+    </button>
+
+</div>
+
+<!-- =======================
+DELETE MODAL
+======================= -->
+
+<div
+class="delete-modal"
+id="deleteModal">
+
+    <div class="delete-box">
+
+        <div class="delete-icon">
+
+            <i
+            class="fa-solid fa-trash-can">
+            </i>
+
+        </div>
+
+        <h2>Hapus Website?</h2>
+
+        <p>
+
+            Data yang dihapus tidak bisa
+            dikembalikan lagi.
+
+        </p>
+
+        <div class="delete-action">
+
+            <button
+            id="cancelDelete"
+            class="cancel-delete">
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Batal
+
+            </button>
+
+            <button
+            id="confirmDelete"
+            class="confirm-delete">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Hapus
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =======================
+CARD TEMPLATE
+======================= -->
+
+<template id="websiteTemplate">
+
+<div class="website-card">
+
+<div class="card-top">
+
+<div class="website-info">
+
+<h2 class="website-title">
+
+<i class="fa-solid fa-globe"></i>
+
+<span class="name"></span>
+
+</h2>
+
+<p class="website-link-name">
+
+<i class="fa-solid fa-tag"></i>
+
+<span class="link-name"></span>
+
+</p>
+
+<a
+class="website-url"
+target="_blank">
+
+<i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+<span></span>
+
+</a>
+
+</div>
+
+<div class="status-badge">
+
+Status
+
+</div>
+
+</div>
+
+<div class="card-middle">
+
+<div class="item">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<div>
+
+<label>Tanggal Habis</label>
+
+<b class="expired-date"></b>
+
+</div>
+
+</div>
+
+<div class="item">
+
+<i class="fa-solid fa-clock"></i>
+
+<div>
+
+<label>Sisa Waktu</label>
+
+<b class="remaining-day"></b>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="progress-wrapper">
+
+<div class="progress-bar">
+
+<div class="progress-fill"></div>
+
+</div>
+
+</div>
+
+<div class="note-box">
+
+<div class="note-title">
+
+<i class="fa-solid fa-note-sticky"></i>
+
+<span>Catatan</span>
+
+</div>
+
+<p class="note-text"></p>
+
+</div>
+
+<div class="month-list">
+
+<!-- Checklist dibuat JavaScript -->
+
+</div>
+
+<div class="card-action">
+
+<button class="open-btn" title="Buka Website">
+    <i class="fa-solid fa-up-right-from-square"></i>
+</button>
+
+<button class="edit-btn" title="Edit Website">
+    <i class="fa-solid fa-pen"></i>
+</button>
+
+<button class="delete-btn" title="Hapus Website">
+    <i class="fa-solid fa-trash"></i>
+</button>
+
+</div>
+
+</div>
+
+</template>
+
+<script src="script.js"></script>
+
+</body>
+</html>
