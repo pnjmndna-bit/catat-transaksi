@@ -2631,3 +2631,124 @@ textarea:focus{
     outline:none;
 
 }
+
+/* ==========================================
+   CODE TYPING PREMIUM
+========================================== */
+
+.website-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* Area kode */
+
+.code-bg{
+
+    position:absolute;
+
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index:0;
+
+    -webkit-mask-image:linear-gradient(
+        to left,
+        rgba(0,0,0,1),
+        rgba(0,0,0,.9),
+        rgba(0,0,0,.6),
+        transparent
+    );
+
+    mask-image:linear-gradient(
+        to left,
+        rgba(0,0,0,1),
+        rgba(0,0,0,.9),
+        rgba(0,0,0,.6),
+        transparent
+    );
+
+}
+
+/* Teks kode */
+
+.typing-code{
+
+    position:absolute;
+
+    top:18px;
+
+    right:18px;
+
+    left:auto;
+
+    width:180px;
+
+    font-family:Consolas,Monaco,monospace;
+
+    font-size:11px;
+
+    line-height:18px;
+
+    color:#63e3ff;
+
+    opacity:.18;
+
+    text-align:left;
+
+    white-space:pre-wrap;
+
+    user-select:none;
+
+    text-shadow:
+        0 0 4px rgba(99,227,255,.35),
+        0 0 10px rgba(99,227,255,.25);
+
+}
+
+/* Cursor */
+
+.typing-code::after{
+
+    content:"▋";
+
+    color:#7ee8ff;
+
+    animation:blink .8s infinite;
+
+}
+
+/* Semua isi card di atas kode */
+
+.website-card>*:not(.code-bg){
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/* Kedip cursor */
+
+@keyframes blink{
+
+    0%,45%{
+
+        opacity:1;
+
+    }
+
+    46%,100%{
+
+        opacity:0;
+
+    }
+
+}
+
