@@ -22,49 +22,17 @@ const FILES_TO_CACHE = [
    INSTALL
 ========================================== */
 
-self.addEventListener("install",(event)=>{
-
-    event.waitUntil(
-
-        caches.open(CACHE_NAME)
-
-        .then(cache=>cache.addAll(FILES_TO_CACHE))
-
-    );
-
+self.addEventListener("install", (event) => {
     self.skipWaiting();
-
 });
 
 /* ==========================================
    ACTIVATE
 ========================================== */
 
-self.addEventListener("activate",(event)=>{
+self.addEventListener("activate", (event) => {
 
-    event.waitUntil(
-
-        caches.keys().then(keys=>{
-
-            return Promise.all(
-
-                keys.map(key=>{
-
-                    if(key!==CACHE_NAME){
-
-                        return caches.delete(key);
-
-                    }
-
-                })
-
-            );
-
-        })
-
-    );
-
-    self.clients.claim();
+    event.waitUntil(self.clients.claim());
 
 });
 
@@ -72,44 +40,4 @@ self.addEventListener("activate",(event)=>{
    FETCH
 ========================================== */
 
-self.addEventListener("fetch",(event)=>{
-
-    if(event.request.method!=="GET") return;
-
-    event.respondWith(
-
-        caches.match(event.request)
-
-        .then(response=>{
-
-            return response ||
-
-            fetch(event.request)
-
-            .then(networkResponse=>{
-
-                const clone = networkResponse.clone();
-
-                caches.open(CACHE_NAME)
-
-                .then(cache=>{
-
-                    cache.put(event.request,clone);
-
-                });
-
-                return networkResponse;
-
-            })
-
-            .catch(()=>{
-
-                return caches.match("./offline.html");
-
-            });
-
-        })
-
-    );
-
-});
+self.addEventListener("fetch", () => {});
