@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Folder frontend
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname));
 
 // ================================
 // CONNECT MONGODB
@@ -198,7 +198,7 @@ app.delete("/website/:id", async(req,res)=>{
 app.use((req,res)=>{
 
     res.sendFile(
-        path.join(__dirname,"public","index.html")
+        path.join(__dirname,"index.html")
     );
 
 });
