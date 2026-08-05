@@ -38,11 +38,35 @@ const expiredDate = document.getElementById("expiredDate");
 
 const todayDate = document.getElementById("todayDate");
 
-let websites = JSON.parse(localStorage.getItem("pxxstudio_websites")) || [];
+let websites = [];
 
 let editIndex = -1;
 
 let deleteIndex = -1;
+
+/* ==========================================
+   LOAD WEBSITE DARI SERVER
+========================================== */
+
+async function loadWebsite(){
+
+    try{
+
+        const res = await fetch("/website");
+
+        websites = await res.json();
+
+        renderWebsite();
+
+    }catch(err){
+
+        console.error(err);
+
+        showToast("Gagal mengambil data website");
+
+    }
+
+}
 
 /* ==========================================
    TANGGAL HARI INI
@@ -92,22 +116,6 @@ setTimeout(()=>{
 toast.classList.remove("show");
 
 },2500);
-
-}
-
-/* ==========================================
-   SIMPAN DATA
-========================================== */
-
-function saveData(){
-
-localStorage.setItem(
-
-"pxxstudio_websites",
-
-JSON.stringify(websites)
-
-);
 
 }
 
@@ -524,38 +532,55 @@ function closeWebsiteModal(){
    TAMBAH DATA
 ========================================== */
 
-function addData(){
+async function addData(){
 
-    websites.push({
+    try{
 
-        id:Date.now(),
+        await fetch("/website",{
 
-        name:websiteName.value.trim(),
+            method:"POST",
 
-        backupUrl:
-backupUrl.value.trim()
-? (
-    backupUrl.value.trim().startsWith("http")
-    ? backupUrl.value.trim()
-    : "https://" + backupUrl.value.trim()
-)
-: "",
+            headers:{
+                "Content-Type":"application/json"
+            },
 
-        url: websiteUrl.value.trim().startsWith("http")
-    ? websiteUrl.value.trim()
-    : "https://" + websiteUrl.value.trim(),
+            body:JSON.stringify({
 
-        expiredDate:expiredDate.value,
+                name:websiteName.value.trim(),
 
-    });
+                backupUrl:
+                backupUrl.value.trim()
+                ? (
+                    backupUrl.value.trim().startsWith("http")
+                    ? backupUrl.value.trim()
+                    : "https://" + backupUrl.value.trim()
+                )
+                : "",
 
-    saveData();
+                url:
+                websiteUrl.value.trim().startsWith("http")
+                ? websiteUrl.value.trim()
+                : "https://" + websiteUrl.value.trim(),
 
-    renderWebsite();
+                expiredDate:expiredDate.value
 
-    closeWebsiteModal();
+            })
 
-    showToast("Website berhasil ditambahkan");
+        });
+
+        await loadWebsite();
+
+        closeWebsiteModal();
+
+        showToast("Website berhasil ditambahkan");
+
+    }catch(err){
+
+        console.error(err);
+
+        showToast("Gagal menambahkan website");
+
+    }
 
 }
 
@@ -563,38 +588,55 @@ backupUrl.value.trim()
    EDIT DATA
 ========================================== */
 
-function updateData(){
+async function updateData(){
 
-    websites[editIndex]={
+    try{
 
-        ...websites[editIndex],
+        await fetch("/website/"+websites[editIndex]._id,{
 
-        name:websiteName.value.trim(),
+            method:"PUT",
 
-        backupUrl:
-backupUrl.value.trim().startsWith("http")
-?
-backupUrl.value.trim()
-:
-"https://" +
-backupUrl.value.trim(),
+            headers:{
+                "Content-Type":"application/json"
+            },
 
-        url: websiteUrl.value.trim().startsWith("http")
-    ? websiteUrl.value.trim()
-    : "https://" + websiteUrl.value.trim(),
+            body:JSON.stringify({
 
-        expiredDate:expiredDate.value,
+                name:websiteName.value.trim(),
 
+                backupUrl:
+                backupUrl.value.trim()
+                ? (
+                    backupUrl.value.trim().startsWith("http")
+                    ? backupUrl.value.trim()
+                    : "https://" + backupUrl.value.trim()
+                )
+                : "",
 
-    };
+                url:
+                websiteUrl.value.trim().startsWith("http")
+                ? websiteUrl.value.trim()
+                : "https://" + websiteUrl.value.trim(),
 
-    saveData();
+                expiredDate:expiredDate.value
 
-    renderWebsite();
+            })
 
-    closeWebsiteModal();
+        });
 
-    showToast("Website berhasil diperbarui");
+        await loadWebsite();
+
+        closeWebsiteModal();
+
+        showToast("Website berhasil diperbarui");
+
+    }catch(err){
+
+        console.error(err);
+
+        showToast("Gagal mengubah website");
+
+    }
 
 }
 
@@ -768,29 +810,35 @@ function exportBackup(){
 
 }
 
-window.addEventListener("beforeunload",()=>{
-
-    saveData();
-
-});
-
 document.getElementById("cancelDelete").onclick=()=>{
 
     deleteModal.classList.remove("active");
 
 };
 
-document.getElementById("confirmDelete").onclick=()=>{
+document.getElementById("confirmDelete").onclick = async()=>{
 
-    websites.splice(deleteIndex,1);
+    try{
 
-    saveData();
+        await fetch("/website/"+websites[deleteIndex]._id,{
 
-    renderWebsite();
+            method:"DELETE"
 
-    deleteModal.classList.remove("active");
+        });
 
-    showToast("Website berhasil dihapus");
+        await loadWebsite();
+
+        deleteModal.classList.remove("active");
+
+        showToast("Website berhasil dihapus");
+
+    }catch(err){
+
+        console.error(err);
+
+        showToast("Gagal menghapus website");
+
+    }
 
 };
 
@@ -883,7 +931,7 @@ function startTyping(card){
 
 }
 
-renderWebsite();
+loadWebsite();
 
 searchInput.addEventListener("input",e=>{
 
